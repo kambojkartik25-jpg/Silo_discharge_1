@@ -1,0 +1,4 @@
+﻿silo_id,capacity_kg,body_diameter_m,outlet_diameter_m,initial_mass_kg
+S1,4000,3.0,0.20,0
+S2,4000,3.2,0.20,0
+S3,4000,3.1,0.21,0

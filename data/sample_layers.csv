@@ -1,0 +1,9 @@
+﻿silo_id,layer_index,lot_id,supplier,segment_mass_kg
+S1,1,L1001,BBM,1200
+S1,2,L1002,COFCO,900
+S1,3,L1003,Malteurop,700
+S2,1,L1001,BBM,1400
+S2,2,L1003,Malteurop,1000
+S2,3,L1002,COFCO,600
+S3,1,L1002,COFCO,700
+S3,2,L1003,Malteurop,700

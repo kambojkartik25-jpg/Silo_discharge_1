@@ -1,0 +1,6 @@
+﻿numpy>=1.28
+pandas>=2.2
+scipy>=1.11
+pytest
+black
+mypy
