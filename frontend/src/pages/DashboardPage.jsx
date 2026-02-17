@@ -3,6 +3,9 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import SiloFigure from "../components/SiloFigure";
 import { useAppContext } from "../context/AppContext";
 
+const API_BASE_URL =
+  import.meta.env.VITE_API_BASE_URL || "http://localhost:8000";
+
 function round(value) {
   if (typeof value !== "number" || Number.isNaN(value)) {
     return "-";
@@ -24,7 +27,7 @@ function MiniPairBar({ label, leftValue, rightValue, deltaValue }) {
       <div className="mb-2 flex items-center justify-between gap-3 text-lg font-semibold">
         <span className="text-stone-800 dark:text-stone-200">{label}</span>
         <span
-          className={`${Number(deltaValue) > 0 ? "text-amber-700" : "text-emerald-700"} text-base`}
+          className={`${Number(deltaValue) > 0 ? "text-amber-700" : "text-emerald-700"}text-base`}
         >
           Δ {round(deltaValue)}
         </span>
@@ -97,8 +100,6 @@ function DashboardPage() {
   const [responseData, setResponseData] = useState(null);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  const apiBaseUrl =
-    import.meta.env.VITE_API_BASE_URL || "http://localhost:8000";
 
   const targetRows = useMemo(() => {
     if (!responseData) {
@@ -122,7 +123,7 @@ function DashboardPage() {
 
     setLoading(true);
     try {
-      const res = await fetch(`${apiBaseUrl}/optimize`, {
+      const res = await fetch(`${API_BASE_URL}/optimize`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -142,7 +143,7 @@ function DashboardPage() {
     } finally {
       setLoading(false);
     }
-  }, [apiBaseUrl, payload]);
+  }, [payload]);
 
   useEffect(() => {
     setOptimizeAction(() => onOptimize);

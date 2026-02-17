@@ -1,9 +1,11 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
 
 import { useAppContext } from "../context/AppContext";
 
 function InputFormPage() {
   const { payload, setPayload } = useAppContext();
+  const [formError, setFormError] = useState("");
 
   const silos = payload.silos || [];
   const suppliers = payload.suppliers || [];
@@ -47,6 +49,7 @@ function InputFormPage() {
   };
 
   const addSiloRow = () => {
+    setFormError("");
     const next = normalizeSilos([
       ...silos,
       {
@@ -60,20 +63,37 @@ function InputFormPage() {
     updatePayload("silos", next);
   };
 
+  const generateLotId = () => {
+    if (window.crypto?.randomUUID) {
+      return `L${window.crypto.randomUUID().slice(0, 8)}`;
+    }
+    return `L${Date.now().toString(36)}${Math.random().toString(36).slice(2, 6)}`;
+  };
+
   const addLayerRow = () => {
+    if (!silos.length) {
+      setFormError("Please add at least one silo before adding a layer.");
+      return;
+    }
+    if (!suppliers.length) {
+      setFormError("Please add at least one supplier before adding a layer.");
+      return;
+    }
+    setFormError("");
     updatePayload("layers", [
       ...(payload.layers || []),
       {
         silo_id: silos[0]?.silo_id || "S1",
         layer_index: 1,
-        lot_id: `L${Date.now().toString().slice(-4)}`,
-        supplier: suppliers[0]?.supplier || "",
+        lot_id: generateLotId(),
+        supplier: suppliers[0].supplier,
         segment_mass_kg: 0,
       },
     ]);
   };
 
   const addSupplierRow = () => {
+    setFormError("");
     updatePayload("suppliers", [
       ...(payload.suppliers || []),
       {
@@ -124,6 +144,12 @@ function InputFormPage() {
           Back to Dashboard
         </Link>
       </div>
+
+      {formError ? (
+        <p className="rounded-md bg-red-100 p-2 text-sm text-red-800 dark:bg-red-950/50 dark:text-red-300">
+          {formError}
+        </p>
+      ) : null}
 
       <section className="rounded-2xl border border-stone-300 bg-stone-50 p-4 shadow-sm dark:border-zinc-700 dark:bg-zinc-800">
         <div className="mb-3 flex items-center justify-between">
@@ -410,6 +436,9 @@ function InputFormPage() {
                   <td className="px-2 py-2">
                     <input
                       type="number"
+                      min="0"
+                      max="100"
+                      step="0.01"
                       value={supplier.moisture_pct}
                       onChange={(e) =>
                         updateArrayField(
@@ -425,6 +454,9 @@ function InputFormPage() {
                   <td className="px-2 py-2">
                     <input
                       type="number"
+                      min="0"
+                      max="100"
+                      step="0.01"
                       value={supplier.fine_extract_db_pct}
                       onChange={(e) =>
                         updateArrayField(
@@ -440,6 +472,9 @@ function InputFormPage() {
                   <td className="px-2 py-2">
                     <input
                       type="number"
+                      min="0"
+                      max="14"
+                      step="0.01"
                       value={supplier.wort_pH}
                       onChange={(e) =>
                         updateArrayField(
@@ -455,6 +490,8 @@ function InputFormPage() {
                   <td className="px-2 py-2">
                     <input
                       type="number"
+                      min="0"
+                      step="0.01"
                       value={supplier.diastatic_power_WK}
                       onChange={(e) =>
                         updateArrayField(
@@ -470,6 +507,9 @@ function InputFormPage() {
                   <td className="px-2 py-2">
                     <input
                       type="number"
+                      min="0"
+                      max="100"
+                      step="0.01"
                       value={supplier.total_protein_pct}
                       onChange={(e) =>
                         updateArrayField(
@@ -485,6 +525,8 @@ function InputFormPage() {
                   <td className="px-2 py-2">
                     <input
                       type="number"
+                      min="0"
+                      step="0.01"
                       value={supplier.wort_colour_EBC}
                       onChange={(e) =>
                         updateArrayField(

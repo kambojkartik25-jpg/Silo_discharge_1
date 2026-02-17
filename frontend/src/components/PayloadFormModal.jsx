@@ -44,40 +44,63 @@ function PayloadFormModal({ isOpen, onClose, initialPayload, onSubmit }) {
     setFormState((prev) => ({ ...prev, [name]: value }));
   };
 
+  const parseJsonField = (rawValue, label) => {
+    try {
+      return JSON.parse(rawValue);
+    } catch (parseFieldError) {
+      const baseMessage =
+        parseFieldError && parseFieldError.message
+          ? parseFieldError.message
+          : "Unable to parse JSON.";
+      throw new Error(`Invalid JSON in ${label}: ${baseMessage}`);
+    }
+  };
+
   const onSave = () => {
     try {
       const nextPayload = {
-        silos: JSON.parse(formState.silos),
-        layers: JSON.parse(formState.layers),
-        suppliers: JSON.parse(formState.suppliers),
-        material: JSON.parse(formState.material),
-        beverloo: JSON.parse(formState.beverloo),
+        silos: parseJsonField(formState.silos, "Silos"),
+        layers: parseJsonField(formState.layers, "Layers"),
+        suppliers: parseJsonField(formState.suppliers, "Suppliers"),
+        material: parseJsonField(formState.material, "Material"),
+        beverloo: parseJsonField(formState.beverloo, "Beverloo"),
         sigma_m: Number(formState.sigma_m),
         steps: Number(formState.steps),
         auto_adjust: Boolean(formState.auto_adjust),
-        target_params: JSON.parse(formState.target_params),
-        weights: JSON.parse(formState.weights),
+        target_params: parseJsonField(formState.target_params, "Target Params"),
+        weights: parseJsonField(formState.weights, "Weights"),
         mode: formState.mode,
         fixed_total_mass_kg:
           formState.fixed_total_mass_kg === ""
             ? null
             : Number(formState.fixed_total_mass_kg),
         optimizer: formState.optimizer,
-        optimizer_settings: JSON.parse(formState.optimizer_settings),
+        optimizer_settings: parseJsonField(
+          formState.optimizer_settings,
+          "Optimizer Settings",
+        ),
         return_debug: Boolean(formState.return_debug),
       };
       onSubmit(nextPayload);
       onClose();
     } catch (parseError) {
-      setError(parseError.message || "Invalid form JSON.");
+      setError(parseError?.message || "Invalid JSON in one or more fields.");
     }
   };
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-stone-950/45 p-4">
-      <div className="max-h-[92vh] w-full max-w-6xl overflow-auto rounded-2xl border border-stone-300 bg-stone-50 p-5 shadow-2xl dark:border-zinc-700 dark:bg-zinc-800">
+      <div
+        className="max-h-[92vh] w-full max-w-6xl overflow-auto rounded-2xl border border-stone-300 bg-stone-50 p-5 shadow-2xl dark:border-zinc-700 dark:bg-zinc-800"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="payload-form-modal-title"
+      >
         <div className="mb-4 flex items-center justify-between">
-          <h2 className="text-xl font-semibold text-stone-900 dark:text-stone-100">
+          <h2
+            id="payload-form-modal-title"
+            className="text-xl font-semibold text-stone-900 dark:text-stone-100"
+          >
             Input Form
           </h2>
           <button
