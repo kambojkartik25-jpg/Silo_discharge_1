@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useMemo } from "react";
 
 function colorForIndex(index, total) {
   const goldenAngle = 137.508;
@@ -8,7 +8,10 @@ function colorForIndex(index, total) {
 }
 
 function SiloTank({ silo, layers, layerColorMap }) {
-  const totalLayerMass = layers.reduce((sum, layer) => sum + Number(layer.segment_mass_kg || 0), 0);
+  const totalLayerMass = layers.reduce(
+    (sum, layer) => sum + Number(layer.segment_mass_kg || 0),
+    0,
+  );
   const shapeTopY = 20;
   const shapeBottomY = 265;
   const shapeHeight = shapeBottomY - shapeTopY;
@@ -20,26 +23,38 @@ function SiloTank({ silo, layers, layerColorMap }) {
 
   return (
     <div className="flex flex-col items-center gap-2">
-      <svg viewBox="0 0 140 280" className="h-64 w-40" role="img" aria-label={`Silo ${silo.silo_id}`}>
+      <svg
+        viewBox="0 0 140 280"
+        className="h-64 w-40"
+        role="img"
+        aria-label={`Silo ${silo.silo_id}`}
+      >
         <defs>
           <clipPath id={`silo-shape-${silo.silo_id}`}>
             <path d={shapePath} />
           </clipPath>
         </defs>
 
-        <path d={shapePath} fill="rgb(245 245 244)" className="dark:fill-zinc-900" />
+        <path
+          d={shapePath}
+          fill="rgb(245 245 244)"
+          className="dark:fill-zinc-900"
+        />
 
         {(() => {
           let cursorY = shapeBottomY;
           return layers.map((layer) => {
             const segmentMass = Number(layer.segment_mass_kg || 0);
-            const height = totalLayerMass > 0 ? (segmentMass / totalLayerMass) * shapeHeight : 0;
+            const height =
+              totalLayerMass > 0
+                ? (segmentMass / totalLayerMass) * shapeHeight
+                : 0;
             const renderHeight = Math.max(height, 10);
             const y = cursorY - renderHeight;
             cursorY = y;
 
             const colorKey = `${layer.silo_id}-${layer.layer_index}-${layer.lot_id}`;
-            const colorValue = layerColorMap.get(colorKey) || '#94a3b8';
+            const colorValue = layerColorMap.get(colorKey) || "#94a3b8";
             return (
               <rect
                 key={`${layer.silo_id}-${layer.layer_index}-${layer.lot_id}`}
@@ -64,8 +79,12 @@ function SiloTank({ silo, layers, layerColorMap }) {
         />
       </svg>
       <div className="text-center text-xs">
-        <p className="font-semibold text-stone-800 dark:text-stone-100">{silo.silo_id}</p>
-        <p className="text-stone-500 dark:text-stone-400">{layers.length} layers</p>
+        <p className="font-semibold text-stone-800 dark:text-stone-100">
+          {silo.silo_id}
+        </p>
+        <p className="text-stone-500 dark:text-stone-400">
+          {layers.length} layers
+        </p>
       </div>
     </div>
   );
@@ -94,7 +113,9 @@ function SiloFigure({ silos, layers }) {
       groups.get(key).push(layer);
     });
     groups.forEach((groupLayers) => {
-      groupLayers.sort((left, right) => Number(left.layer_index) - Number(right.layer_index));
+      groupLayers.sort(
+        (left, right) => Number(left.layer_index) - Number(right.layer_index),
+      );
     });
     return groups;
   }, [layers, silos]);
@@ -102,8 +123,12 @@ function SiloFigure({ silos, layers }) {
   return (
     <div>
       <div className="mb-4 flex items-center justify-between">
-        <h3 className="text-lg font-semibold text-stone-900 dark:text-stone-100">Silo Figure</h3>
-        <p className="text-sm text-stone-500 dark:text-stone-400">{silos.length} silos</p>
+        <h3 className="text-lg font-semibold text-stone-900 dark:text-stone-100">
+          Silo Figure
+        </h3>
+        <p className="text-sm text-stone-500 dark:text-stone-400">
+          {silos.length} silos
+        </p>
       </div>
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">

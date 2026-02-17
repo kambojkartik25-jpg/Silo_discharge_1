@@ -1,17 +1,21 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from "react";
 
-import SiloFigure from '../components/SiloFigure';
-import { useAppContext } from '../context/AppContext';
+import SiloFigure from "../components/SiloFigure";
+import { useAppContext } from "../context/AppContext";
 
 function round(value) {
-  if (typeof value !== 'number' || Number.isNaN(value)) {
-    return '-';
+  if (typeof value !== "number" || Number.isNaN(value)) {
+    return "-";
   }
   return value.toFixed(4);
 }
 
 function MiniPairBar({ label, leftValue, rightValue, deltaValue }) {
-  const denominator = Math.max(Math.abs(leftValue || 0), Math.abs(rightValue || 0), 1e-9);
+  const denominator = Math.max(
+    Math.abs(leftValue || 0),
+    Math.abs(rightValue || 0),
+    1e-9,
+  );
   const leftPct = (Math.abs(leftValue || 0) / denominator) * 100;
   const rightPct = (Math.abs(rightValue || 0) / denominator) * 100;
 
@@ -19,7 +23,9 @@ function MiniPairBar({ label, leftValue, rightValue, deltaValue }) {
     <div className="rounded-xl border border-stone-200 bg-stone-100/70 p-3 dark:border-zinc-700 dark:bg-zinc-800/60">
       <div className="mb-2 flex items-center justify-between gap-3 text-lg font-semibold">
         <span className="text-stone-800 dark:text-stone-200">{label}</span>
-        <span className={`${Number(deltaValue) > 0 ? 'text-amber-700' : 'text-emerald-700'} text-base`}>
+        <span
+          className={`${Number(deltaValue) > 0 ? "text-amber-700" : "text-emerald-700"} text-base`}
+        >
           Δ {round(deltaValue)}
         </span>
       </div>
@@ -30,7 +36,10 @@ function MiniPairBar({ label, leftValue, rightValue, deltaValue }) {
             <span>{round(leftValue)}</span>
           </div>
           <div className="h-3.5 rounded-md bg-stone-200 dark:bg-zinc-700">
-            <div className="h-3.5 rounded-md bg-sky-500" style={{ width: `${leftPct}%` }} />
+            <div
+              className="h-3.5 rounded-md bg-sky-500"
+              style={{ width: `${leftPct}%` }}
+            />
           </div>
         </div>
         <div>
@@ -39,7 +48,10 @@ function MiniPairBar({ label, leftValue, rightValue, deltaValue }) {
             <span>{round(rightValue)}</span>
           </div>
           <div className="h-3.5 rounded-md bg-stone-200 dark:bg-zinc-700">
-            <div className="h-3.5 rounded-md bg-amber-500" style={{ width: `${rightPct}%` }} />
+            <div
+              className="h-3.5 rounded-md bg-amber-500"
+              style={{ width: `${rightPct}%` }}
+            />
           </div>
         </div>
       </div>
@@ -47,8 +59,11 @@ function MiniPairBar({ label, leftValue, rightValue, deltaValue }) {
   );
 }
 
-function SimpleSeriesBars({ title, unitSuffix = '', values }) {
-  const maxValue = Math.max(...values.map((entry) => Math.abs(entry.value)), 1e-9);
+function SimpleSeriesBars({ title, unitSuffix = "", values }) {
+  const maxValue = Math.max(
+    ...values.map((entry) => Math.abs(entry.value)),
+    1e-9,
+  );
   return (
     <div className="rounded-lg border border-stone-200 bg-stone-100/70 p-3 dark:border-zinc-700 dark:bg-zinc-800/60">
       <p className="mb-2 text-sm font-semibold">{title}</p>
@@ -57,12 +72,17 @@ function SimpleSeriesBars({ title, unitSuffix = '', values }) {
           <div key={entry.label}>
             <div className="mb-0.5 flex justify-between text-xs text-stone-700 dark:text-stone-300">
               <span>{entry.label}</span>
-              <span>{round(entry.value)}{unitSuffix}</span>
+              <span>
+                {round(entry.value)}
+                {unitSuffix}
+              </span>
             </div>
             <div className="h-2.5 rounded bg-stone-200 dark:bg-zinc-700">
               <div
                 className="h-2.5 rounded bg-emerald-500"
-                style={{ width: `${(Math.abs(entry.value) / maxValue) * 100}%` }}
+                style={{
+                  width: `${(Math.abs(entry.value) / maxValue) * 100}%`,
+                }}
               />
             </div>
           </div>
@@ -75,9 +95,10 @@ function SimpleSeriesBars({ title, unitSuffix = '', values }) {
 function DashboardPage() {
   const { payload, setOptimizeAction } = useAppContext();
   const [responseData, setResponseData] = useState(null);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
+  const apiBaseUrl =
+    import.meta.env.VITE_API_BASE_URL || "http://localhost:8000";
 
   const targetRows = useMemo(() => {
     if (!responseData) {
@@ -96,27 +117,28 @@ function DashboardPage() {
   }, [payload, responseData]);
 
   const onOptimize = useCallback(async () => {
-    setError('');
+    setError("");
     setResponseData(null);
 
     setLoading(true);
     try {
       const res = await fetch(`${apiBaseUrl}/optimize`, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify(payload),
       });
 
       const data = await res.json();
       if (!res.ok) {
-        const detail = typeof data?.detail === 'string' ? data.detail : JSON.stringify(data);
+        const detail =
+          typeof data?.detail === "string" ? data.detail : JSON.stringify(data);
         throw new Error(detail || `Request failed with status ${res.status}`);
       }
       setResponseData(data);
     } catch (requestError) {
-      setError(requestError.message || 'Request failed.');
+      setError(requestError.message || "Request failed.");
     } finally {
       setLoading(false);
     }
@@ -129,20 +151,24 @@ function DashboardPage() {
 
   const bestTimesEntries = useMemo(
     () =>
-      Object.entries(responseData?.best_times_s || {}).map(([label, value]) => ({
-        label,
-        value: Number(value || 0),
-      })),
-    [responseData]
+      Object.entries(responseData?.best_times_s || {}).map(
+        ([label, value]) => ({
+          label,
+          value: Number(value || 0),
+        }),
+      ),
+    [responseData],
   );
 
   const bestMassEntries = useMemo(
     () =>
-      Object.entries(responseData?.best_masses_kg || {}).map(([label, value]) => ({
-        label,
-        value: Number(value || 0),
-      })),
-    [responseData]
+      Object.entries(responseData?.best_masses_kg || {}).map(
+        ([label, value]) => ({
+          label,
+          value: Number(value || 0),
+        }),
+      ),
+    [responseData],
   );
 
   return (
@@ -162,8 +188,13 @@ function DashboardPage() {
           <h3 className="mb-3 text-lg font-semibold">Target Parameters</h3>
           <div className="space-y-2">
             {Object.entries(payload.target_params || {}).map(([key, value]) => (
-              <div key={key} className="flex items-center justify-between rounded-md bg-stone-200/70 px-3 py-2 text-sm dark:bg-zinc-700/60">
-                <span className="text-stone-700 dark:text-stone-300">{key}</span>
+              <div
+                key={key}
+                className="flex items-center justify-between rounded-md bg-stone-200/70 px-3 py-2 text-sm dark:bg-zinc-700/60"
+              >
+                <span className="text-stone-700 dark:text-stone-300">
+                  {key}
+                </span>
                 <span className="font-semibold">{round(value)}</span>
               </div>
             ))}
@@ -173,7 +204,9 @@ function DashboardPage() {
         <section className="rounded-2xl border border-stone-300 bg-stone-50 p-4 shadow-sm dark:border-zinc-700 dark:bg-zinc-800 lg:col-span-4">
           <h3 className="mb-3 text-lg font-semibold">Optimization Summary</h3>
           {!responseData ? (
-            <p className="text-sm text-stone-500 dark:text-stone-400">Run optimize to view results.</p>
+            <p className="text-sm text-stone-500 dark:text-stone-400">
+              Run optimize to view results.
+            </p>
           ) : (
             <div className="grid grid-cols-2 gap-2 text-sm">
               <div className="rounded-md bg-stone-200/70 p-2 dark:bg-zinc-700/60">
@@ -190,7 +223,9 @@ function DashboardPage() {
               </div>
               <div className="rounded-md bg-stone-200/70 p-2 dark:bg-zinc-700/60">
                 <p className="text-stone-500">Final Error</p>
-                <p className="font-semibold">{round(responseData.final_error)}</p>
+                <p className="font-semibold">
+                  {round(responseData.final_error)}
+                </p>
               </div>
             </div>
           )}
@@ -199,7 +234,9 @@ function DashboardPage() {
         <section className="rounded-2xl border border-stone-300 bg-stone-50 p-4 shadow-sm dark:border-zinc-700 dark:bg-zinc-800 lg:col-span-8">
           <h3 className="mb-3 text-lg font-semibold">Targeted vs Predicted</h3>
           {!targetRows.length ? (
-            <p className="text-sm text-stone-500 dark:text-stone-400">No comparison available yet.</p>
+            <p className="text-sm text-stone-500 dark:text-stone-400">
+              No comparison available yet.
+            </p>
           ) : (
             <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
               {targetRows.map((row) => (
@@ -218,17 +255,31 @@ function DashboardPage() {
         <section className="rounded-2xl border border-stone-300 bg-stone-50 p-4 shadow-sm dark:border-zinc-700 dark:bg-zinc-800 lg:col-span-12">
           <h3 className="mb-3 text-lg font-semibold">Best Discharge</h3>
           {!responseData ? (
-            <p className="text-sm text-stone-500 dark:text-stone-400">No optimization output yet.</p>
+            <p className="text-sm text-stone-500 dark:text-stone-400">
+              No optimization output yet.
+            </p>
           ) : (
             <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
-              <SimpleSeriesBars title="Best Times" unitSuffix=" s" values={bestTimesEntries} />
-              <SimpleSeriesBars title="Best Masses" unitSuffix=" kg" values={bestMassEntries} />
+              <SimpleSeriesBars
+                title="Best Times"
+                unitSuffix=" s"
+                values={bestTimesEntries}
+              />
+              <SimpleSeriesBars
+                title="Best Masses"
+                unitSuffix=" kg"
+                values={bestMassEntries}
+              />
             </div>
           )}
         </section>
       </div>
 
-      {error ? <p className="mt-4 rounded-md bg-red-100 p-2 text-sm text-red-800 dark:bg-red-950/50 dark:text-red-300">{error}</p> : null}
+      {error ? (
+        <p className="mt-4 rounded-md bg-red-100 p-2 text-sm text-red-800 dark:bg-red-950/50 dark:text-red-300">
+          {error}
+        </p>
+      ) : null}
     </>
   );
 }

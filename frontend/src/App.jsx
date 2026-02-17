@@ -1,24 +1,25 @@
-import { useEffect } from 'react';
-import { Navigate, NavLink, Route, Routes } from 'react-router-dom';
-import { useLocation } from 'react-router-dom';
+import { useEffect } from "react";
+import { Navigate, NavLink, Route, Routes } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
-import { useAppContext } from './context/AppContext';
-import DashboardPage from './pages/DashboardPage';
-import InputFormPage from './pages/InputFormPage';
+import { useAppContext } from "./context/AppContext";
+import DashboardPage from "./pages/DashboardPage";
+import InputFormPage from "./pages/InputFormPage";
 
 function App() {
   const { isDark, setIsDark, optimizeAction } = useAppContext();
   const location = useLocation();
-  const isDashboardRoute = location.pathname === '/dashboard' || location.pathname === '/';
+  const isDashboardRoute =
+    location.pathname === "/dashboard" || location.pathname === "/";
 
   useEffect(() => {
     const root = document.documentElement;
     if (isDark) {
-      root.classList.add('dark');
-      window.localStorage.setItem('silo-blend-theme', 'dark');
+      root.classList.add("dark");
+      window.localStorage.setItem("silo-blend-theme", "dark");
     } else {
-      root.classList.remove('dark');
-      window.localStorage.setItem('silo-blend-theme', 'light');
+      root.classList.remove("dark");
+      window.localStorage.setItem("silo-blend-theme", "light");
     }
   }, [isDark]);
 
@@ -28,7 +29,10 @@ function App() {
         <header className="mb-6 flex flex-wrap items-center justify-between gap-3">
           <div>
             <h1 className="text-2xl font-bold">Silo Blend Dashboard</h1>
-            <p className="text-sm text-stone-600 dark:text-stone-300">Navigate between dashboard and form editor using shared global state.</p>
+            <p className="text-sm text-stone-600 dark:text-stone-300">
+              Navigate between dashboard and form editor using shared global
+              state.
+            </p>
           </div>
           <div className="flex items-center gap-2">
             <nav className="flex items-center gap-2">
@@ -37,8 +41,8 @@ function App() {
                 className={({ isActive }) =>
                   `rounded-lg px-3 py-2 text-sm ${
                     isActive
-                      ? 'bg-amber-800 text-white'
-                      : 'border border-stone-300 bg-stone-50 text-stone-700 hover:bg-stone-200 dark:border-zinc-700 dark:bg-zinc-800 dark:text-stone-200 dark:hover:bg-zinc-700'
+                      ? "bg-amber-800 text-white"
+                      : "border border-stone-300 bg-stone-50 text-stone-700 hover:bg-stone-200 dark:border-zinc-700 dark:bg-zinc-800 dark:text-stone-200 dark:hover:bg-zinc-700"
                   }`
                 }
               >
@@ -49,8 +53,8 @@ function App() {
                 className={({ isActive }) =>
                   `rounded-lg px-3 py-2 text-sm ${
                     isActive
-                      ? 'bg-amber-800 text-white'
-                      : 'border border-stone-300 bg-stone-50 text-stone-700 hover:bg-stone-200 dark:border-zinc-700 dark:bg-zinc-800 dark:text-stone-200 dark:hover:bg-zinc-700'
+                      ? "bg-amber-800 text-white"
+                      : "border border-stone-300 bg-stone-50 text-stone-700 hover:bg-stone-200 dark:border-zinc-700 dark:bg-zinc-800 dark:text-stone-200 dark:hover:bg-zinc-700"
                   }`
                 }
               >
@@ -72,7 +76,7 @@ function App() {
               onClick={() => setIsDark((prev) => !prev)}
               className="rounded-lg border border-stone-300 bg-stone-50 px-3 py-2 text-sm text-stone-700 hover:bg-stone-200 dark:border-zinc-700 dark:bg-zinc-800 dark:text-stone-200 dark:hover:bg-zinc-700"
             >
-              {isDark ? 'Light Mode' : 'Dark Mode'}
+              {isDark ? "Light Mode" : "Dark Mode"}
             </button>
           </div>
         </header>

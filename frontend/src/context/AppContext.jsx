@@ -1,6 +1,6 @@
-import { createContext, useContext, useMemo, useState } from 'react';
+import { createContext, useContext, useMemo, useState } from "react";
 
-import defaultPayload from '../data/defaultPayload';
+import defaultPayload from "../data/defaultPayload";
 
 const AppContext = createContext(null);
 
@@ -8,14 +8,14 @@ function AppProvider({ children }) {
   const [payload, setPayload] = useState(defaultPayload);
   const [optimizeAction, setOptimizeAction] = useState(null);
   const [isDark, setIsDark] = useState(() => {
-    const saved = window.localStorage.getItem('silo-blend-theme');
-    if (saved === 'dark') {
+    const saved = window.localStorage.getItem("silo-blend-theme");
+    if (saved === "dark") {
       return true;
     }
-    if (saved === 'light') {
+    if (saved === "light") {
       return false;
     }
-    return window.matchMedia('(prefers-color-scheme: dark)').matches;
+    return window.matchMedia("(prefers-color-scheme: dark)").matches;
   });
 
   const value = useMemo(
@@ -27,7 +27,7 @@ function AppProvider({ children }) {
       isDark,
       setIsDark,
     }),
-    [isDark, optimizeAction, payload]
+    [isDark, optimizeAction, payload],
   );
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
@@ -36,7 +36,7 @@ function AppProvider({ children }) {
 function useAppContext() {
   const context = useContext(AppContext);
   if (!context) {
-    throw new Error('useAppContext must be used within AppProvider');
+    throw new Error("useAppContext must be used within AppProvider");
   }
   return context;
 }
