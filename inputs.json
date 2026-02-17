@@ -1,0 +1,104 @@
+{
+  "simulate": {
+    "silos": [
+      {
+        "silo_id": "S1",
+        "capacity_kg": 4000,
+        "body_diameter_m": 3.0,
+        "outlet_diameter_m": 0.2,
+        "initial_mass_kg": 4000
+      }
+    ],
+    "layers": [
+      {
+        "silo_id": "S1",
+        "layer_index": 1,
+        "lot_id": "L1",
+        "supplier": "BBM",
+        "segment_mass_kg": 4000
+      }
+    ],
+    "suppliers": [
+      {
+        "supplier": "BBM",
+        "moisture_pct": 4.2,
+        "fine_extract_db_pct": 82.0,
+        "wort_pH": 5.98
+      }
+    ],
+    "discharge": [
+      {
+        "silo_id": "S1",
+        "discharge_mass_kg": 2500
+      }
+    ],
+    "material": {
+      "rho_bulk_kg_m3": 610.0,
+      "grain_diameter_m": 0.004
+    },
+    "beverloo": {
+      "C": 0.58,
+      "k": 1.4,
+      "g_m_s2": 9.81
+    },
+    "sigma_m": 0.12,
+    "steps": 200,
+    "auto_adjust": false
+  },
+  "optimize": {
+    "silos": [
+      {
+        "silo_id": "S1",
+        "capacity_kg": 4000,
+        "body_diameter_m": 3.0,
+        "outlet_diameter_m": 0.2,
+        "initial_mass_kg": 4000
+      }
+    ],
+    "layers": [
+      {
+        "silo_id": "S1",
+        "layer_index": 1,
+        "lot_id": "L1",
+        "supplier": "BBM",
+        "segment_mass_kg": 4000
+      }
+    ],
+    "suppliers": [
+      {
+        "supplier": "BBM",
+        "moisture_pct": 4.2,
+        "fine_extract_db_pct": 82.0,
+        "wort_pH": 5.98
+      }
+    ],
+    "material": {
+      "rho_bulk_kg_m3": 610.0,
+      "grain_diameter_m": 0.004
+    },
+    "beverloo": {
+      "C": 0.58,
+      "k": 1.4,
+      "g_m_s2": 9.81
+    },
+    "sigma_m": 0.12,
+    "steps": 200,
+    "auto_adjust": false,
+    "target_params": {
+      "moisture_pct": 4.28,
+      "wort_pH": 5.96
+    },
+    "weights": {
+      "moisture_pct": 1.0,
+      "wort_pH": 5.0
+    },
+    "mode": "A",
+    "fixed_total_mass_kg": 2500,
+    "optimizer": "slsqp",
+    "optimizer_settings": {
+      "maxiter": 100,
+      "ftol": 1e-8
+    },
+    "return_debug": true
+  }
+}
