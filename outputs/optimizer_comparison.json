@@ -1,0 +1,71 @@
+[
+  {
+    "optimizer_name": "montecarlo",
+    "success": true,
+    "final_error": 0.00597534004768545,
+    "total_mass": 5532.253285649045,
+    "wall_time_s": 39.964757100038696,
+    "best_times_s": {
+      "S1": 100.30611231494694,
+      "S2": 146.12168275608218,
+      "S3": 46.92201805065637
+    },
+    "best_masses_kg": {
+      "S1": 1852.082729499272,
+      "S2": 2698.0354316611674,
+      "S3": 982.1351244886062
+    },
+    "pred_moisture_pct": 4.281440353601842,
+    "pred_fine_extract_db_pct": 81.7338449904605,
+    "pred_wort_pH": 5.963598082798205,
+    "pred_diastatic_power_WK": 333.9288446015359,
+    "pred_total_protein_pct": 10.490031143858818,
+    "pred_wort_colour_EBC": 3.855052545610747
+  },
+  {
+    "optimizer_name": "bayes_opt_gp_minimize",
+    "success": true,
+    "final_error": 0.00955373044782833,
+    "total_mass": 5818.601300825779,
+    "wall_time_s": 6.474299699999392,
+    "best_times_s": {
+      "S1": 139.74958157742753,
+      "S2": 122.95985207763059,
+      "S3": 46.239729218548916
+    },
+    "best_masses_kg": {
+      "S1": 2580.3790070302066,
+      "S2": 2270.3683075635436,
+      "S3": 967.8539862320289
+    },
+    "pred_moisture_pct": 4.284292754893356,
+    "pred_fine_extract_db_pct": 81.72135848929487,
+    "pred_wort_pH": 5.9630914274726265,
+    "pred_diastatic_power_WK": 333.67497849074766,
+    "pred_total_protein_pct": 10.502493980207024,
+    "pred_wort_colour_EBC": 3.8565286469202484
+  },
+  {
+    "optimizer_name": "slsqp",
+    "success": true,
+    "final_error": 0.6001955698602683,
+    "total_mass": 2160.0,
+    "wall_time_s": 0.2615681999595836,
+    "best_times_s": {
+      "S1": 45.493180732447705,
+      "S2": 48.74269364190825,
+      "S3": 20.06571915604501
+    },
+    "best_masses_kg": {
+      "S1": 840.0000000000001,
+      "S2": 899.9999999999999,
+      "S3": 420.0
+    },
+    "pred_moisture_pct": 4.244954925872715,
+    "pred_fine_extract_db_pct": 81.89314288800331,
+    "pred_wort_pH": 5.970087743948763,
+    "pred_diastatic_power_WK": 337.180353270129,
+    "pred_total_protein_pct": 10.330551650385388,
+    "pred_wort_colour_EBC": 3.836111756426433
+  }
+]

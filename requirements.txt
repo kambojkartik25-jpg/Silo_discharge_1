@@ -1,6 +1,7 @@
 ﻿numpy>=1.28
 pandas>=2.2
 scipy>=1.11
+scikit-optimize>=0.10.2
 pytest
 black
 mypy
