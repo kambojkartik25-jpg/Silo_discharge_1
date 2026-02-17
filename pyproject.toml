@@ -14,6 +14,10 @@ dependencies = [
   "pandas>=2.2",
   "scipy>=1.11",
   "scikit-optimize>=0.10.2",
+  "fastapi",
+  "uvicorn[standard]",
+  "pydantic",
+  "python-multipart",
 ]
 
 [tool.setuptools]
