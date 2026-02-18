@@ -72,7 +72,9 @@ class OptimizeRequest(BaseModel):
     weights: dict[str, float] | None = None
     mode: Literal["A", "B"] = "A"
     fixed_total_mass_kg: float | None = Field(default=None, ge=0)
-    optimizer: Literal["slsqp", "least_squares", "trust_constr", "bayes"] = "slsqp"
+    optimizer: Literal["auto", "slsqp", "montecarlo"] = "auto"
+    mc_samples: int = Field(500, ge=1)
+    mc_seed: int = 123
     optimizer_settings: dict[str, Any] | None = None
     return_debug: bool = False
 
@@ -118,8 +120,12 @@ class OptimizeResponse(BaseModel):
     success: bool
     message: str
     final_error: float
+    best_optimizer: str | None = None
+    compared: dict[str, float | None] | None = None
+    runner_up_error: float | None = None
     best_times_s: dict[str, float]
     best_masses_kg: dict[str, float]
+    best_result: dict[str, Any] | None = None
     predicted_total_blended_params: dict[str, float]
     deltas_vs_target: dict[str, float]
     per_silo_blended_params: dict[str, dict[str, float]] | None = None
