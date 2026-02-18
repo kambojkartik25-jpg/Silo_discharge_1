@@ -1,5 +1,7 @@
 ﻿from __future__ import annotations
 
+import logging
+
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -12,6 +14,9 @@ from .schemas import (
     SimulationResponse,
 )
 from .service import available_optimizers, infer_param_names, run_optimization_service, run_simulation_service
+
+logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(name)s - %(message)s")
+logger = logging.getLogger("silo_blend.api")
 
 app = FastAPI(
     title="silo_blend API",
@@ -48,11 +53,26 @@ def simulate(payload: SimulationRequest) -> dict:
 
 @app.post("/optimize", response_model=OptimizeResponse)
 def optimize(payload: OptimizeRequest) -> dict:
+    logger.info(
+        "POST /optimize optimizer=%s mode=%s silos=%d steps=%d",
+        payload.optimizer,
+        payload.mode,
+        len(payload.silos),
+        payload.steps,
+    )
     try:
-        return run_optimization_service(payload)
+        response = run_optimization_service(payload)
+        logger.info(
+            "POST /optimize completed success=%s final_error=%.6f",
+            response.get("success"),
+            float(response.get("final_error", float("nan"))),
+        )
+        return response
     except ValueError as exc:
+        logger.warning("POST /optimize validation error: %s", exc)
         raise HTTPException(status_code=422, detail=str(exc)) from exc
     except RuntimeError as exc:
+        logger.warning("POST /optimize runtime error: %s", exc)
         raise HTTPException(status_code=400, detail=str(exc)) from exc
 
 
